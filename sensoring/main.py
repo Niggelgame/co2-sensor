@@ -42,4 +42,4 @@ if __name__ == "__main__":
     while True:
         print("Reading PWM")
         obj = read_from_pwm()
-        print(obj.co2)
+        print(obj['co2'])
