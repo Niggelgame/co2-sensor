@@ -37,4 +37,5 @@ def read_from_pwm(gpio=12, range=5000):
 
 if __name__ == "__main__":
     while True:
+        print("Reading PWM")
         read_from_pwm()
