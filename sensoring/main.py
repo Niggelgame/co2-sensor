@@ -4,7 +4,10 @@ import RPi.GPIO as GPIO
 
 # exception
 class GPIO_Edge_Timeout(Exception):
-  pass
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+
+        print(Exception)
 
 def read_from_pwm(gpio=12, range=5000):
   CYCLE_START_HIGHT_TIME = 2
