@@ -2,13 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="23b2dee4-0be8-42ce-ae89-036d5546db2c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cmd/data/main.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/config/config.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/datastore/datastore.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/datastore/sqlitedatastore.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/http-server/server.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/models/Entry.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/notifications/notificationhandler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/data/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/data/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/config/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/datastore/datastore.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/datastore/datastore.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/datastore/sqlitedatastore.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/datastore/sqlitedatastore.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/http-server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/http-server/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/models/Entry.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/models/Entry.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +40,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="sqlite" />
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
@@ -45,6 +50,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="T:\PythonProjects\co2-sensor\data" />
       <recent name="T:\PythonProjects\co2-sensor\data\pkg\config" />
     </key>
   </component>

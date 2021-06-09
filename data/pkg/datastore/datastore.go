@@ -3,13 +3,15 @@ package datastore
 import "github.com/niggelgame/co2-sensor/data/pkg/models"
 
 type DataStore interface {
-	InsertNewEntry(entry *models.Entry) bool
+	InsertNewEntry(entry *models.Entry) error
 
-	GetLastEntry() *models.Entry
+	GetLastEntry() (*models.Entry, error)
 
-	GetEntriesSince(unixTimestamp int) []*models.Entry
+	GetEntriesSince(unixTimestamp int) ([]*models.Entry, error)
 
-	GetAllEntries() []*models.Entry
+	GetAllEntries() ([]*models.Entry, error)
+
+	CreateNonExistingTables() error
 
 	Close()
 }

@@ -1,41 +1,62 @@
 package datastore
 
 import (
-	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
+	"errors"
 	"github.com/niggelgame/co2-sensor/data/pkg/models"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 	"log"
 )
 
 type SqliteDataStore struct {
-	database *sql.DB
+	database *gorm.DB
 }
 
-func (s *SqliteDataStore) InsertNewEntry(entry *models.Entry) bool {
-	panic("implement me")
+func (s *SqliteDataStore) CreateNonExistingTables() error {
+	err := s.database.AutoMigrate(&models.Entry{})
+	return err
 }
 
-func (s *SqliteDataStore) GetLastEntry() *models.Entry {
-	panic("implement me")
+func (s *SqliteDataStore) InsertNewEntry(entry *models.Entry) error {
+	s.database.Create(entry)
+	return nil
 }
 
-func (s *SqliteDataStore) GetEntriesSince(unixTimestamp int) []*models.Entry {
-	panic("implement me")
+func (s *SqliteDataStore) GetLastEntry() (*models.Entry, error) {
+	var entries []*models.Entry
+	s.database.Order("timestamp desc").Limit(1).Find(&entries)
+	if len(entries) > 0 {
+		return entries[0], nil
+	} else {
+		return nil, errors.New("no item found")
+	}
 }
 
-func (s *SqliteDataStore) GetAllEntries() []*models.Entry {
-	panic("implement me")
+func (s *SqliteDataStore) GetEntriesSince(unixTimestamp int) ([]*models.Entry, error) {
+	var entries []*models.Entry
+	s.database.Where("timestamp >= ?", unixTimestamp).Find(&entries)
+
+	return entries, nil
+}
+
+func (s *SqliteDataStore) GetAllEntries() ([]*models.Entry, error) {
+	var entries []*models.Entry
+	s.database.Find(&entries)
+	return entries, nil
 }
 
 func (s *SqliteDataStore) Close() {
-	err := s.database.Close()
+	sqlDB, err := s.database.DB()
+	if err == nil {
+		err = sqlDB.Close()
+	}
 	if err != nil {
 		log.Println("did not close db correctly: ", err)
 	}
 }
 
 func CreateSqliteDataStore(filepath string) *SqliteDataStore {
-	db, err := sql.Open("sqlite3", filepath)
+	db, err := gorm.Open(sqlite.Open(filepath))
 	if err != nil {
 		log.Fatal("could not open database file: ", err)
 	}

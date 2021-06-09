@@ -1,24 +1,29 @@
 package main
 
 import (
-	"fmt"
 	"github.com/niggelgame/co2-sensor/data/pkg/config"
 	"github.com/niggelgame/co2-sensor/data/pkg/datastore"
 	http_server "github.com/niggelgame/co2-sensor/data/pkg/http-server"
+	"github.com/niggelgame/co2-sensor/data/pkg/notifications"
+	"log"
 )
 
 func main() {
-	fmt.Println("Hello")
-
 	cfg := config.LoadConfig()
-
-	fmt.Println("SQLite File: ", cfg.SqlitePath)
 
 	var store datastore.DataStore = datastore.CreateSqliteDataStore(cfg.SqlitePath)
 
+	err := store.CreateNonExistingTables()
+
+	if err != nil {
+		log.Fatal("cannot create new tables: ", err)
+	}
+
 	defer store.Close()
 
-	server := http_server.CreateServer(&store)
+	notificationHandler := notifications.CreateNotificationHandler(cfg.FirebaseCredentialsPath)
+
+	server := http_server.CreateServer(&store, notificationHandler)
 
 	server.Start(cfg.BindAddress)
 }
