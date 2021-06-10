@@ -63,7 +63,7 @@ func (s *Server) GetLastEntry(c *fiber.Ctx) (err error) {
 
 func (s *Server) GetEntriesSince(c *fiber.Ctx) (err error) {
 	ts := c.Params("timestamp")
-	timestamp, err := strconv.Atoi(ts)
+	timestamp, err := strconv.ParseInt(ts, 10, 64)
 	if err != nil {
 		c.Status(400)
 		return err

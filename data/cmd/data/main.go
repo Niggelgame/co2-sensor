@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/niggelgame/co2-sensor/data/pkg/config"
 	"github.com/niggelgame/co2-sensor/data/pkg/datastore"
+	"github.com/niggelgame/co2-sensor/data/pkg/dbcleanup"
 	http_server "github.com/niggelgame/co2-sensor/data/pkg/http-server"
 	"github.com/niggelgame/co2-sensor/data/pkg/notifications"
 	"log"
@@ -19,12 +20,18 @@ func main() {
 		log.Fatal("cannot create new tables: ", err)
 	}
 
+	cleanup := dbcleanup.CreateSqliteDbCleanup(store.GetGormDB(), cfg.MaxEntryAgeDays)
+
+	// Create Goroutine deleting values older than cfg.MaxEntryAgeDays days
+	go cleanup.Cleanup()
+
+	defer cleanup.StopCleanup()
+
 	defer store.Close()
 
 	notificationHandler := notifications.CreateNotificationHandler(cfg.FirebaseCredentialsPath)
 
 	server := http_server.CreateServer(&store, notificationHandler)
 
-	// Create Goroutine deleting values older than 4 weeks
 	server.Start(cfg.BindAddress)
 }

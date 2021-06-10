@@ -12,6 +12,10 @@ type SqliteDataStore struct {
 	database *gorm.DB
 }
 
+func (s *SqliteDataStore) GetGormDB() *gorm.DB {
+	return s.database
+}
+
 func (s *SqliteDataStore) CreateNonExistingTables() error {
 	err := s.database.AutoMigrate(&models.Entry{})
 	return err
@@ -32,7 +36,7 @@ func (s *SqliteDataStore) GetLastEntry() (*models.Entry, error) {
 	}
 }
 
-func (s *SqliteDataStore) GetEntriesSince(unixTimestamp int) ([]*models.Entry, error) {
+func (s *SqliteDataStore) GetEntriesSince(unixTimestamp int64) ([]*models.Entry, error) {
 	var entries []*models.Entry
 	s.database.Where("timestamp >= ?", unixTimestamp).Find(&entries)
 

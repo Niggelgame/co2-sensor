@@ -13,6 +13,7 @@ type Config struct {
 	FirebaseCredentialsPath string `default:"serviceAccountKey.json" envconfig:"FIREBASE_CREDENTIALS_PATH"`
 	WarnTriggerLevel        int    `default:"1200" envconfig:"WARN_TRIGGER_LEVEL"`
 	FatalTriggerLevel       int    `default:"1500" envconfig:"FATAL_TRIGGER_LEVEL"`
+	MaxEntryAgeDays         int    `default:"30" envconfig:"MAX_ENTRY_AGE_DAYS"`
 }
 
 func LoadConfig() *Config {
@@ -23,6 +24,6 @@ func LoadConfig() *Config {
 	if err != nil {
 		log.Fatal("failed to laod config: ", err)
 	}
-	
+
 	return &cfg
 }
