@@ -46,7 +46,7 @@ def sendToServer(value):
     'value': value
   }
   try:
-    requests.post(url = endpoint, body = data)
+    requests.post(url = endpoint, data = data)
   except requests.exceptions.Timeout:
     print("Could not send datapoint...")
     return
