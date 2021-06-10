@@ -59,8 +59,10 @@ def sendToServer(value):
   
 
 if __name__ == "__main__":
+    gpio_pin_str = os.environ.get('SENSORING_PIN', '12')
+    gpio_pin = int(gpio_pin_str)
     while True:
         print("Reading PWM")
-        obj = read_from_pwm()
+        obj = read_from_pwm(12)
         print("PWM is " + str(obj['co2']))
         sendToServer(obj['co2'])
