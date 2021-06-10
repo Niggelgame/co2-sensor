@@ -6,6 +6,8 @@ services:
         volumes:
             - .:/root
     sensoring:
+        depends_on:
+            - data-web
         image: ghcr.io/niggelgame/co2-sensoring-image:11
         environment:
             - DATA_BASE_URL=http://data-web:8000
