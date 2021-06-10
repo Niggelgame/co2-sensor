@@ -1,6 +1,9 @@
 import time
 import RPi.GPIO as GPIO
+import os
+import requests
 
+data_base_url = os.environ['DATA_BASE_URL']
 
 # exception
 class GPIO_Edge_Timeout(Exception):
@@ -37,9 +40,25 @@ def read_from_pwm(gpio=12, range=5000):
 
   return {'co2': int(falling -rising - CYCLE_START_HIGHT_TIME) / 2 *(range/500)}
 
+async def sendToServer(value):
+  endpoint = data_base_url + "/add"
+  data = {
+    'value': value
+  }
+  try:
+    requests.post(url = endpoint, body = data)
+  except requests.exceptions.Timeout:
+    print("Could not send datapoint...")
+    return
+  except requests.exceptions.TooManyRedirects:
+    print("Problem with url")
+    return
+  except requests.exceptions.RequestException as e:
+    print("Shit something went completely wrong")
+  
 
 if __name__ == "__main__":
     while True:
         print("Reading PWM")
         obj = read_from_pwm()
-        print(obj['co2'])
+        sendToServer(obj['co2'])

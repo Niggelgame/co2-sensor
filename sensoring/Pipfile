@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 "rpi.gpio" = "*"
+requests = "*"
 
 [dev-packages]
 
