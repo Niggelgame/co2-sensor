@@ -1,7 +1,0 @@
-services:
-    data-web:
-        image: ghcr.io/niggelgame/data-image:4
-        ports:
-            - "8000:8000"
-        volumes:
-            - .:/root
