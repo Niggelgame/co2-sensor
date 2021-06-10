@@ -1,6 +1,6 @@
 services:
     data-web:
-        image: ghcr.io/niggelgame/co2-data-image:7
+        image: ghcr.io/niggelgame/co2-data-image:16
         ports:
             - "8000:8000"
         volumes:
