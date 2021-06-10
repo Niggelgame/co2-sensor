@@ -27,7 +27,7 @@ jobs:
           while IFS= read -r file
           do
             echo $file
-            if [[ $file != data/* ]]; then
+            if [[ $file != data/** ]]; then
               echo "This modified file is not under the 'data' folder."
               echo "::set-output name=run_job::false"
               break
@@ -58,7 +58,7 @@ jobs:
           while IFS= read -r file
           do
             echo $file
-            if [[ $file != sensoring/* ]]; then
+            if [[ $file != sensoring/** ]]; then
               echo "This modified file is not under the 'sensoring' folder."
               echo "::set-output name=run_job::false"
               break
