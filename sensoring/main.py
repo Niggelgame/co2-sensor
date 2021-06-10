@@ -40,7 +40,7 @@ def read_from_pwm(gpio=12, range=5000):
 
   return {'co2': int(falling -rising - CYCLE_START_HIGHT_TIME) / 2 *(range/500)}
 
-async def sendToServer(value):
+def sendToServer(value):
   endpoint = data_base_url + "/add"
   data = {
     'value': value
