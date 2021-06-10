@@ -30,9 +30,9 @@ jobs:
             if [[ $file != data/** ]]; then
               echo "This modified file is not under the 'data' folder."
               echo "::set-output name=run_job::false"
-              break
             else
               echo "::set-output name=run_job::true"
+              break
             fi
           done < files.txt
 
@@ -61,9 +61,9 @@ jobs:
             if [[ $file != sensoring/** ]]; then
               echo "This modified file is not under the 'sensoring' folder."
               echo "::set-output name=run_job::false"
-              break
             else
               echo "::set-output name=run_job::true"
+              break
             fi
           done < files.txt
 

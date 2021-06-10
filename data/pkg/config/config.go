@@ -17,11 +17,12 @@ type Config struct {
 
 func LoadConfig() *Config {
 	_ = godotenv.Load()
-	
+
 	var cfg Config
 	err := envconfig.Process("DATA", &cfg)
 	if err != nil {
 		log.Fatal("failed to laod config: ", err)
 	}
+	
 	return &cfg
 }
