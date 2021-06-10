@@ -1,0 +1,13 @@
+services:
+    data-web:
+        image: ghcr.io/niggelgame/data-image:4
+        ports:
+            - "8000:8000"
+        volumes:
+            - .:/root
+    sensoring:
+        image: ghcr.io/niggelgame/co2-sensoring-image:11
+        environment:
+            - DATA_BASE_URL=http://data-web:8000
+        devices:
+            - "/dev/gpiomem:/dev/gpiomem"
