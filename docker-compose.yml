@@ -14,5 +14,4 @@ services:
         image: ghcr.io/niggelgame/co2-sensoring-image:11
         environment:
             - DATA_BASE_URL=http://data-web:8000
-        devices:
-            - "/dev/gpiomem:/dev/gpiomem"
+        privileged: true
