@@ -26,7 +26,6 @@ services:
             - HOMEBRIDGE_CONFIG_UI=1
             - HOMEBRIDGE_CONFIG_UI_PORT=8581
             - TZ=Europe/Berlin
-        ports:
-            - "8581:8581"
+        network_mode: host
         volumes:
             - ./volumes/homebridge:/homebridge
