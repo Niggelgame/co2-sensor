@@ -1,0 +1,8 @@
+[Unit]
+Description=Start CO2 Sensor
+
+[Service]
+ExecStart=/home/pi/co2-sensor/start.sh
+
+[Install]
+WantedBy=multi-user.target
