@@ -2,6 +2,7 @@ import time
 import RPi.GPIO as GPIO
 import os
 import requests
+import json
 
 data_base_url = os.environ['DATA_BASE_URL']
 
@@ -46,7 +47,7 @@ def sendToServer(value):
     'value': value
   }
   try:
-    requests.post(url = endpoint, data = data)
+    requests.post(url = endpoint, data = json.dumps(data))
   except requests.exceptions.Timeout:
     print("Could not send datapoint...")
     return
