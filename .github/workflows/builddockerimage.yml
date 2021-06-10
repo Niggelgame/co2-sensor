@@ -5,7 +5,71 @@ on:
     branches: [ master ]
 
 jobs:
+  check-data:
+    name: Check files for data server
+    outputs:
+      run_job: ${{ steps.check_files.outputs.run_job }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: check modified files
+        id: check_files
+        run: |
+          echo "=============== list modified files ==============="
+          git diff --name-only HEAD^ HEAD
+          
+          echo "========== check paths of modified files =========="
+          git diff --name-only HEAD^ HEAD > files.txt
+          while IFS= read -r file
+          do
+            echo $file
+            if [[ $file != data/* ]]; then
+              echo "This modified file is not under the 'data' folder."
+              echo "::set-output name=run_job::false"
+              break
+            else
+              echo "::set-output name=run_job::true"
+            fi
+          done < files.txt
+
+  check-sensoring:
+    name: Check files for the sensoring tool
+    outputs:
+      run_job: ${{ steps.check_files.outputs.run_job }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: check modified files
+        id: check_files
+        run: |
+          echo "=============== list modified files ==============="
+          git diff --name-only HEAD^ HEAD
+          
+          echo "========== check paths of modified files =========="
+          git diff --name-only HEAD^ HEAD > files.txt
+          while IFS= read -r file
+          do
+            echo $file
+            if [[ $file != sensoring/* ]]; then
+              echo "This modified file is not under the 'sensoring' folder."
+              echo "::set-output name=run_job::false"
+              break
+            else
+              echo "::set-output name=run_job::true"
+            fi
+          done < files.txt
+
   build:
+    needs: check-data
+    if: needs.check-data.outputs.run_job == 'true'
     runs-on: ubuntu-18.04
     env:
       DOCKER_REGISTRY: ghcr.io
@@ -46,3 +110,63 @@ jobs:
                   --tag ${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }} \
                   --file ./Dockerfile \
                   --output type=image,push=true .
+
+  build-sensor:
+    needs: check-sensoring
+    if: needs.check-sensoring.outputs.run_job == 'true'
+    runs-on: ubuntu-18.04
+    env:
+      DOCKER_REGISTRY: ghcr.io
+      DOCKER_IMAGE: niggelgame/co2-sensoring-image
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      DOCKER_TARGET_PLATFORM: linux/arm/v7
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9.5"
+      
+      - name: Install pipenv
+        run: |
+          python -m pip install --upgrade pipenv wheel
+
+      - name: freeze pipfile
+        run: |
+          cd sensoring
+          pipenv lock -r > requirements.txt
+
+      # https://github.com/docker/setup-qemu-action
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      # https://github.com/docker/setup-buildx-action
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      
+      - name: Prepare      
+        if: success()      
+        id: prepare      
+        run: |        
+          echo ::set-output name=docker_platform::${DOCKER_TARGET_PLATFORM}        
+          echo ::set-output name=docker_image::${DOCKER_REGISTRY}/${DOCKER_IMAGE}        
+          echo ::set-output name=version::${GITHUB_RUN_NUMBER}  
+
+      - name: Docker Login      
+        if: success()      
+        run: |        
+          echo "${DOCKER_PASSWORD}" | docker login ${DOCKER_REGISTRY} --username "${DOCKER_USERNAME}" --password-stdin
+
+      - name: Push Image
+        if: success()      
+        run: |        
+          cd sensoring
+          docker buildx build \
+                  --platform ${{ steps.prepare.outputs.docker_platform }} \
+                  --tag ${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }} \
+                  --file ./Dockerfile \
+                  --output type=image,push=true .
+
+      
