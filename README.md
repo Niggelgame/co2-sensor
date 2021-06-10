@@ -1,4 +1,4 @@
-# Notes while development
+# Notes during development
 
 https://github.com/Lomray-Software/homebridge-co2-level#readme
 
