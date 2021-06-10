@@ -1,4 +1,4 @@
-FROM docker pull arm32v7/python:3.9.5
+FROM arm32v7/python:3.9.5
 
 WORKDIR /root/
 
