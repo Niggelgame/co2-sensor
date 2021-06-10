@@ -44,7 +44,18 @@ func (s *Server) AddEntry(c *fiber.Ctx) (err error) {
 }
 
 func (s *Server) GetLastEntry(c *fiber.Ctx) (err error) {
-	err = c.SendString("Hello")
+	entry, err := (*s.store).GetLastEntry()
+	if err != nil {
+		c.Status(500)
+		return err
+	}
+
+	ent, err := json.Marshal(entry)
+	if err != nil {
+		c.Status(500)
+		return err
+	}
+	err = c.Send(ent)
 
 	return err
 }
