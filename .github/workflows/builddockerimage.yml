@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-18.04
     env:
       DOCKER_REGISTRY: ghcr.io
-      DOCKER_IMAGE: niggelgame/data-image
+      DOCKER_IMAGE: niggelgame/co2-data-image
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       DOCKER_TARGET_PLATFORM: linux/arm/v7
