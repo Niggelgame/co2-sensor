@@ -7,6 +7,7 @@ import (
 	"github.com/niggelgame/co2-sensor/data/pkg/models"
 	"github.com/niggelgame/co2-sensor/data/pkg/notifications"
 	"log"
+	"strconv"
 	"time"
 )
 
@@ -61,13 +62,41 @@ func (s *Server) GetLastEntry(c *fiber.Ctx) (err error) {
 }
 
 func (s *Server) GetEntriesSince(c *fiber.Ctx) (err error) {
-	err = c.SendString("Hello")
+	ts := c.Params("timestamp")
+	timestamp, err := strconv.Atoi(ts)
+	if err != nil {
+		c.Status(400)
+		return err
+	}
+	entries, err := (*s.store).GetEntriesSince(timestamp)
+	if err != nil {
+		c.Status(500)
+		return err
+	}
+
+	ent, err := json.Marshal(entries)
+	if err != nil {
+		c.Status(500)
+		return err
+	}
+	err = c.Send(ent)
 
 	return err
 }
 
 func (s *Server) GetAll(c *fiber.Ctx) (err error) {
-	err = c.SendString("Hello")
+	entries, err := (*s.store).GetAllEntries()
+	if err != nil {
+		c.Status(500)
+		return err
+	}
+
+	ent, err := json.Marshal(entries)
+	if err != nil {
+		c.Status(500)
+		return err
+	}
+	err = c.Send(ent)
 
 	return err
 }

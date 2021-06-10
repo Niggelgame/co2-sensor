@@ -25,5 +25,7 @@ func main() {
 
 	server := http_server.CreateServer(&store, notificationHandler)
 
+	// Create Goroutine deleting values older than 4 weeks
+
 	server.Start(cfg.BindAddress)
 }
