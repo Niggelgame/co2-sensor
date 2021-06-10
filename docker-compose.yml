@@ -4,7 +4,10 @@ services:
         ports:
             - "8000:8000"
         volumes:
-            - .:/root/
+            - .:/root/data
+        environment:
+            - DATA_SQLITE_PATH=data/sqlite.db
+            - DATA_FIREBASE_CREDENTIALS_PATH=data/serviceAccountKeys.json
     sensoring:
         depends_on:
             - data-web
