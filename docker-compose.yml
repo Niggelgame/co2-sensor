@@ -11,7 +11,7 @@ services:
     sensoring:
         depends_on:
             - data-web
-        image: ghcr.io/niggelgame/co2-sensoring-image:29
+        image: ghcr.io/niggelgame/co2-sensoring-image:30
         environment:
             - DATA_BASE_URL=http://data-web:8000
         privileged: true

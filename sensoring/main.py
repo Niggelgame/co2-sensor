@@ -44,7 +44,7 @@ def read_from_pwm(gpio=12, range=5000):
 def sendToServer(value):
   endpoint = data_base_url + "/add"
   data = {
-    'value': value
+    'value': int(value)
   }
   try:
     requests.post(url = endpoint, data = json.dumps(data))
