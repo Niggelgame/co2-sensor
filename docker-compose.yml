@@ -8,6 +8,7 @@ services:
         environment:
             - DATA_SQLITE_PATH=data/sqlite.db
             - DATA_FIREBASE_CREDENTIALS_PATH=data/serviceAccountKeys.json
+        restart: always
     sensoring:
         depends_on:
             - data-web
@@ -15,3 +16,17 @@ services:
         environment:
             - DATA_BASE_URL=http://data-web:8000
         privileged: true
+        restart: always
+    homebridge:
+        restart: always
+        image: oznu/homebridge
+        environment:
+            - PGID=1000
+            - PUID=1000
+            - HOMEBRIDGE_CONFIG_UI=1
+            - HOMEBRIDGE_CONFIG_UI_PORT=8581
+            - TZ=Europe/Berlin
+        ports:
+            - "8581:8581"
+        volumes:
+            - ./volumes/homebridge:/homebridge
