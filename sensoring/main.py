@@ -61,4 +61,5 @@ if __name__ == "__main__":
     while True:
         print("Reading PWM")
         obj = read_from_pwm()
+        print("PWM is " + str(obj['co2']))
         sendToServer(obj['co2'])
