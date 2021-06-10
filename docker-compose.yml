@@ -1,6 +1,6 @@
 services:
     data-web:
-        image: ghcr.io/niggelgame/co2-data-image:23
+        image: ghcr.io/niggelgame/co2-data-image:32
         ports:
             - "8000:8000"
         volumes:
@@ -11,7 +11,7 @@ services:
     sensoring:
         depends_on:
             - data-web
-        image: ghcr.io/niggelgame/co2-sensoring-image:30
+        image: ghcr.io/niggelgame/co2-sensoring-image:31
         environment:
             - DATA_BASE_URL=http://data-web:8000
         privileged: true
