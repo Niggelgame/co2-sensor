@@ -1,6 +1,9 @@
 FROM arm32v7/golang:1.16-alpine3.13 as builder
 
 WORKDIR /app
+
+RUN apk add --no-cache build-base
+
 COPY go.mod go.sum ./
 
 RUN go mod download
