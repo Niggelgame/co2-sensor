@@ -13,9 +13,7 @@ type NotificationHandler struct {
 }
 
 func (n *NotificationHandler) SendNotification() {
-	n.Client.Send(context.Background(), &messaging.Message{
 
-	})
 }
 
 func CreateNotificationHandler(firebaseCredentialsPath string) *NotificationHandler {

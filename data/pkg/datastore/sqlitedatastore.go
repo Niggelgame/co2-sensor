@@ -12,12 +12,30 @@ type SqliteDataStore struct {
 	database *gorm.DB
 }
 
+func (s *SqliteDataStore) RegisterMessaging(device *models.NotificationsDevice) error {
+	var notificationsDevices []*models.NotificationsDevice
+	s.database.Where("messaging_token = ?", device.MessagingToken).Find(&notificationsDevices)
+
+	if len(notificationsDevices) > 0 {
+		return nil
+	}
+
+	s.database.Create(device)
+	return nil
+}
+
+func (s *SqliteDataStore) UnregisterMessaging(device *models.NotificationsDevice) error {
+	s.database.Where("messaging_token = ?", device.MessagingToken).Delete(device)
+	return nil
+}
+
 func (s *SqliteDataStore) GetGormDB() *gorm.DB {
 	return s.database
 }
 
 func (s *SqliteDataStore) CreateNonExistingTables() error {
 	err := s.database.AutoMigrate(&models.Entry{})
+	err = s.database.AutoMigrate(&models.NotificationsDevice{})
 	return err
 }
 

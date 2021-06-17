@@ -8,7 +8,7 @@ type Entry struct {
 	Timestamp int64 `json:"timestamp"`
 }
 
-func New(value int, timestamp int64) *Entry {
+func NewEntry(value int, timestamp int64) *Entry {
 	return &Entry{Value: value, Timestamp: timestamp}
 }
 

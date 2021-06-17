@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.niggelgame.app">
+    package="dev.niggelgame.co2sensor">
    <application
         android:label="app"
         android:icon="@mipmap/ic_launcher">

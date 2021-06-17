@@ -3,3 +3,4 @@ serviceAccountKey.json
 .idea*
 main.exe
 main
+.env

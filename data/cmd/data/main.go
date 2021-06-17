@@ -12,6 +12,8 @@ import (
 func main() {
 	cfg := config.LoadConfig()
 
+	fbCfg := config.LoadFirebaseConfig()
+
 	var store datastore.DataStore = datastore.CreateSqliteDataStore(cfg.SqlitePath)
 
 	err := store.CreateNonExistingTables()
@@ -31,7 +33,7 @@ func main() {
 
 	notificationHandler := notifications.CreateNotificationHandler(cfg.FirebaseCredentialsPath)
 
-	server := http_server.CreateServer(&store, notificationHandler)
+	server := http_server.CreateServer(&store, notificationHandler, fbCfg)
 
 	server.Start(cfg.BindAddress)
 }

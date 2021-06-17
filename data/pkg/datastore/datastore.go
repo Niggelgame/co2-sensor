@@ -14,6 +14,10 @@ type DataStore interface {
 
 	GetAllEntries() ([]*models.Entry, error)
 
+	RegisterMessaging(device *models.NotificationsDevice) error
+
+	UnregisterMessaging(device *models.NotificationsDevice) error
+
 	CreateNonExistingTables() error
 
 	GetGormDB() *gorm.DB

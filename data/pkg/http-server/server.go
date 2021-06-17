@@ -3,6 +3,7 @@ package http_server
 import (
 	"encoding/json"
 	"github.com/gofiber/fiber/v2"
+	"github.com/niggelgame/co2-sensor/data/pkg/config"
 	"github.com/niggelgame/co2-sensor/data/pkg/datastore"
 	"github.com/niggelgame/co2-sensor/data/pkg/models"
 	"github.com/niggelgame/co2-sensor/data/pkg/notifications"
@@ -14,11 +15,10 @@ import (
 type Server struct {
 	store    *datastore.DataStore
 	notifier *notifications.NotificationHandler
+	fbCfg    *config.FirebaseConfig
 }
 
 func (s *Server) AddEntry(c *fiber.Ctx) (err error) {
-	err = c.SendString("Hello")
-
 	var insertEntry models.InsertEntry
 	err = json.Unmarshal(c.Body(), &insertEntry)
 	if err != nil {
@@ -27,7 +27,7 @@ func (s *Server) AddEntry(c *fiber.Ctx) (err error) {
 		return err
 	}
 
-	entry := models.New(insertEntry.Value, time.Now().UnixNano())
+	entry := models.NewEntry(insertEntry.Value, time.Now().UnixNano())
 	err = (*s.store).InsertNewEntry(entry)
 	if err != nil {
 		c.Status(500)
@@ -101,6 +101,92 @@ func (s *Server) GetAll(c *fiber.Ctx) (err error) {
 	return err
 }
 
+func (s *Server) GetAndroidClientConfig(c *fiber.Ctx) (err error) {
+	if s.fbCfg == nil {
+		return err
+	}
+	if s.fbCfg.AppIdAndroid != "" {
+		err = c.JSON(config.ReturnFirebaseConfig{
+			ApiKey:            s.fbCfg.ApiKey,
+			AppId:             s.fbCfg.AppIdAndroid,
+			MessagingSenderId: s.fbCfg.MessagingSenderId,
+			ProjectId:         s.fbCfg.ProjectId,
+		})
+	}
+
+	return err
+}
+
+func (s *Server) GetIosClientConfig(c *fiber.Ctx) (err error) {
+	if s.fbCfg == nil {
+		return err
+	}
+
+	if s.fbCfg.AppIdiOS != "" {
+		err = c.JSON(config.ReturnFirebaseConfig{
+			ApiKey:            s.fbCfg.ApiKey,
+			AppId:             s.fbCfg.AppIdiOS,
+			MessagingSenderId: s.fbCfg.MessagingSenderId,
+			ProjectId:         s.fbCfg.ProjectId,
+		})
+	}
+
+	return err
+}
+
+func (s *Server) GetWebClientConfig(c *fiber.Ctx) (err error) {
+	if s.fbCfg == nil {
+		return err
+	}
+
+	if s.fbCfg.AppIdWeb != "" {
+		err = c.JSON(config.ReturnFirebaseConfig{
+			ApiKey:            s.fbCfg.ApiKey,
+			AppId:             s.fbCfg.AppIdWeb,
+			MessagingSenderId: s.fbCfg.MessagingSenderId,
+			ProjectId:         s.fbCfg.ProjectId,
+		})
+	}
+
+	return err
+}
+
+func (s *Server) RegisterMessagingClient(c *fiber.Ctx) (err error) {
+	var insertNotification models.NotificationsDevice
+	err = json.Unmarshal(c.Body(), &insertNotification)
+	if err != nil {
+		c.Status(400)
+		log.Println("error while parsing json: ", err)
+		return err
+	}
+
+	err = (*s.store).RegisterMessaging(&insertNotification)
+	if err != nil {
+		c.Status(500)
+		return err
+	}
+
+	return err
+}
+
+func (s *Server) UnregisterMessagingClient(c *fiber.Ctx) (err error) {
+	var insertNotification models.NotificationsDevice
+	err = json.Unmarshal(c.Body(), &insertNotification)
+	if err != nil {
+		c.Status(400)
+		log.Println("error while parsing json: ", err)
+		return err
+	}
+
+	err = (*s.store).UnregisterMessaging(&insertNotification)
+	if err != nil {
+		c.Status(500)
+		return err
+	}
+
+	return err
+}
+
 func (s *Server) Start(address string) {
 	app := fiber.New()
 
@@ -109,6 +195,14 @@ func (s *Server) Start(address string) {
 	app.Get("/since/:timestamp", s.GetEntriesSince)
 	app.Get("all", s.GetAll)
 
+	messagingApi := app.Group("/messaging")
+	messagingConfigApi := messagingApi.Group("/config")
+	messagingConfigApi.Get("/android", s.GetAndroidClientConfig)
+	messagingConfigApi.Get("/ios", s.GetIosClientConfig)
+	messagingConfigApi.Get("/web", s.GetWebClientConfig)
+	messagingApi.Post("/register", s.RegisterMessagingClient)
+	messagingApi.Post("/unregister", s.UnregisterMessagingClient)
+
 	err := app.Listen(address)
 
 	if err != nil {
@@ -116,6 +210,6 @@ func (s *Server) Start(address string) {
 	}
 }
 
-func CreateServer(store *datastore.DataStore, notificationHandler *notifications.NotificationHandler) *Server {
-	return &Server{store: store, notifier: notificationHandler}
+func CreateServer(store *datastore.DataStore, notificationHandler *notifications.NotificationHandler, fbCfg *config.FirebaseConfig) *Server {
+	return &Server{store: store, notifier: notificationHandler, fbCfg: fbCfg}
 }
