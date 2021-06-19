@@ -198,7 +198,7 @@ jobs:
                   --file ./Dockerfile \
                   --output type=image,push=true .
 
-  build-app:
+  build-ios-app:
     needs: check-app
     if: needs.check-app.outputs.run_job == 'true'
     runs-on: macos-latest
@@ -219,6 +219,7 @@ jobs:
           cd ./app
           flutter pub get
           flutter pub run build_runner build
+          flutter build ios --release --no-codesign
           cd ./ios && pod install
 
       - name: Setup SSH Keys and known_hosts for fastlane match
@@ -250,3 +251,34 @@ jobs:
           MATCH_KEYCHAIN_NAME: ${{ secrets.MATCH_KEYCHAIN_NAME }}
           MATCH_KEYCHAIN_PASSWORD: ${{ secrets.MATCH_KEYCHAIN_PASSWORD }}
           DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS: ${{ secrets.DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS }}
+
+  build-ios-app:
+    needs: check-app
+    if: needs.check-app.outputs.run_job == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 12.x
+      - name: Decrypt Android keys
+        run: sh ./.github/scripts/decrypt_android_keys.sh
+        env:
+          ANDROID_KEYS_SECRET_PASSPHRASE: ${{ secrets.ANDROID_GPG_KEY }}
+      - name: Setup flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: "stable"
+      - name: Install tools
+        run: |
+          cd ./app
+          flutter pub get
+          flutter pub run build_runner build
+        run: flutter build apk --release
+      - name: Run Fastlane
+        uses: maierj/fastlane-action@v1.4.0
+        with:
+          lane: closed_beta
+          subdirectory: app/android
