@@ -17,6 +17,7 @@ import 'package:get_it/get_it.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   setup();
+
   runApp(MyApp());
 }
 
