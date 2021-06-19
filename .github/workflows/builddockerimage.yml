@@ -277,7 +277,9 @@ jobs:
           flutter pub get
           flutter pub run build_runner build
       - name: Build APK
-        run: flutter build apk --release
+        run: |
+          cd ./app
+          flutter build apk --release
       - name: Run Fastlane
         uses: maierj/fastlane-action@v1.4.0
         with:
