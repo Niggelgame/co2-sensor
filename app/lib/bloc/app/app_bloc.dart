@@ -90,7 +90,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     final storageRepo = GetIt.I.get<StorageRepository>();
 
     storageRepo.remove(PREFS_APP_CONFIG_KEY);
-    var oldToken = await firebaseRepo.getMessagingToken();
+    final oldToken = await firebaseRepo.getMessagingToken();
     firebaseRepo.unregisterApp();
     if (oldToken != null) {
       try {
