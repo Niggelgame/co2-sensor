@@ -14,9 +14,9 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
   @override
   Stream<NotificationState> mapEventToState(NotificationEvent event) async* {
-    if(event is LoadNotificationEvent) {
+    if (event is LoadNotificationEvent) {
       yield LoadingNotificationState();
-      if(event.config == null) {
+      if (event.config == null) {
         yield NoConfigExistingState();
       } else {
         var firebaseRepo = GetIt.I.get<AbstractFirebaseRepository>();
@@ -26,11 +26,11 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
         var newState = _mapSettingToState(settings);
 
-        if(GetIt.I.isRegistered<ApiWrapper>()) {
+        if (GetIt.I.isRegistered<ApiWrapper>()) {
           var apiWrapper = GetIt.I.get<ApiWrapper>();
           var newToken = await firebaseRepo.getMessagingToken();
 
-          if(newToken != null) {
+          if (newToken != null) {
             try {
               apiWrapper.sendMessagingKey(newToken);
               yield newState;
@@ -46,11 +46,14 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   }
 
   NotificationState _mapSettingToState(NotificationSettings setting) {
-    switch(setting.authorizationStatus) {
+    switch (setting.authorizationStatus) {
       case AuthorizationStatus.authorized:
-      case AuthorizationStatus.provisional: return RunningNotificationState();
-      case AuthorizationStatus.notDetermined: return UninitializedNotificationState();
-      case AuthorizationStatus.denied: return UnavailableNotificationState();
+      case AuthorizationStatus.provisional:
+        return RunningNotificationState();
+      case AuthorizationStatus.notDetermined:
+        return UninitializedNotificationState();
+      case AuthorizationStatus.denied:
+        return UnavailableNotificationState();
     }
   }
 }
