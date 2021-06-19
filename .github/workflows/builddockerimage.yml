@@ -252,7 +252,7 @@ jobs:
           MATCH_KEYCHAIN_PASSWORD: ${{ secrets.MATCH_KEYCHAIN_PASSWORD }}
           DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS: ${{ secrets.DELIVER_ITMSTRANSPORTER_ADDITIONAL_UPLOAD_PARAMETERS }}
 
-  build-ios-app:
+  build-android-app:
     needs: check-app
     if: needs.check-app.outputs.run_job == 'true'
     runs-on: ubuntu-latest
