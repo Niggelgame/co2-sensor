@@ -1,8 +1,11 @@
 app_identifier("dev.niggelgame.co2sensor") # The bundle identifier of your app
-apple_id("kedilcomp@gmail.com") # Your Apple email address
 
-itc_team_id("120748155") # App Store Connect Team ID
-team_id("JRPH4CFMW2") # Developer Portal Team ID
+# Your Apple email address
+apple_id(ENV['FASTLANE_USER'])
+# App Store Connect Team ID
+itc_team_id(ENV['ITC_TEAM_ID'])
+# Developer Portal Team ID
+team_id(ENV['TEAM_ID'])
 
 # For more information about the Appfile, see:
 #     https://docs.fastlane.tools/advanced/#appfile
