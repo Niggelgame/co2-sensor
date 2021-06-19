@@ -218,6 +218,7 @@ jobs:
         run: |
           cd ./app
           flutter pub get
+          flutter pub run build_runner build
           cd ./ios && pod install
 
       - name: Setup SSH Keys and known_hosts for fastlane match

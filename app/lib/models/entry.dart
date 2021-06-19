@@ -1,5 +1,3 @@
-
-
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -15,8 +13,7 @@ class Entry extends Equatable {
   @override
   List<Object?> get props => [value, timestamp];
 
-  factory Entry.fromJson(Map<String, dynamic> json) =>
-      _$EntryFromJson(json);
+  factory Entry.fromJson(Map<String, dynamic> json) => _$EntryFromJson(json);
 
   Map<String, dynamic> toJson() => _$EntryToJson(this);
 }
