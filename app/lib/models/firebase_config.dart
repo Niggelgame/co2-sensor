@@ -14,7 +14,6 @@ class FirebaseConfig extends Equatable {
   @JsonKey(name: 'project_id')
   final String projectId;
 
-
   const FirebaseConfig(
       this.apiKey, this.appId, this.messagingSenderId, this.projectId);
 
