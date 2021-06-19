@@ -12,7 +12,7 @@ abstract class AbstractFirebaseRepository {
   Future<NotificationSettings> askForDeviceNotificationPermission();
 }
 
-// const String defaultRemoteFirebaseAppName = "[DEFAULT-REMOTE]";
+const String defaultRemoteFirebaseAppName = "[DEFAULT-REMOTE]";
 
 class FirebaseRepository implements AbstractFirebaseRepository {
   FirebaseApp? _app;
@@ -26,14 +26,14 @@ class FirebaseRepository implements AbstractFirebaseRepository {
       projectId: config.projectId,
     );
     _app = await Firebase.initializeApp(
-        options: options, name: defaultFirebaseAppName);
+        options: options, name: defaultRemoteFirebaseAppName);
 
-    _app.
+    // _app.
   }
 
   @override
   Future unregisterApp() async {
-    if(_app != null) {
+    if (_app != null) {
       FirebaseMessaging.instance.deleteToken();
     }
   }
