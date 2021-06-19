@@ -205,7 +205,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Bundle install
-        run: cd .app//ios && bundle install
+        run: cd ./app/ios && bundle install
       - name: Setup JDK
         uses: actions/setup-java@v1
         with:
