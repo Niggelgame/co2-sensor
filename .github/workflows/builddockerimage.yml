@@ -199,8 +199,8 @@ jobs:
                   --output type=image,push=true .
 
   build-app:
-    needs: check-sensoring
-    if: needs.check-sensoring.outputs.run_job == 'true'
+    needs: check-app
+    if: needs.check-app.outputs.run_job == 'true'
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
