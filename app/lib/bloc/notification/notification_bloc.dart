@@ -19,7 +19,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       if (event.config == null) {
         yield NoConfigExistingState();
       } else {
-        var firebaseRepo = GetIt.I.get<AbstractFirebaseRepository>();
+        var firebaseRepo = GetIt.I.get<AbstractNotificationRepository>();
         await firebaseRepo.registerApp(event.config!);
 
         var settings = await firebaseRepo.askForDeviceNotificationPermission();
@@ -32,7 +32,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
           if (newToken != null) {
             try {
-              apiWrapper.sendMessagingKey(newToken);
+              await apiWrapper.sendMessagingKey(newToken);
               yield newState;
             } catch (e) {
               yield ErrorNotificationState();

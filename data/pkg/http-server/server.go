@@ -61,6 +61,23 @@ func (s *Server) GetLastEntry(c *fiber.Ctx) (err error) {
 	return err
 }
 
+func (s *Server) GetCumulatedEntry(c *fiber.Ctx) (err error) {
+	entry, err := (*s.store).GetCumulatedEntry()
+	if err != nil {
+		c.Status(500)
+		return err
+	}
+
+	ent, err := json.Marshal(entry)
+	if err != nil {
+		c.Status(500)
+		return err
+	}
+	err = c.Send(ent)
+
+	return err
+}
+
 func (s *Server) GetEntriesSince(c *fiber.Ctx) (err error) {
 	ts := c.Params("timestamp")
 	timestamp, err := strconv.ParseInt(ts, 10, 64)
@@ -192,6 +209,7 @@ func (s *Server) Start(address string) {
 
 	app.Post("/add", s.AddEntry)
 	app.Get("/last", s.GetLastEntry)
+	app.Get("/cumulated", s.GetCumulatedEntry)
 	app.Get("/since/:timestamp", s.GetEntriesSince)
 	app.Get("all", s.GetAll)
 

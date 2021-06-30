@@ -12,6 +12,23 @@ type SqliteDataStore struct {
 	database *gorm.DB
 }
 
+func (s *SqliteDataStore) GetCumulatedEntry() (*models.Entry, error) {
+	var entries []*models.Entry
+	s.database.Order("timestamp DESC").Limit(5).Find(&entries)
+
+	if len(entries) > 0 {
+		cumulatedValue := 0
+		for i := 0; i < len(entries); i++ {
+			cumulatedValue = cumulatedValue + entries[i].Value
+		}
+
+		calculatedValue := int(cumulatedValue / len(entries))
+
+		return models.NewEntry(calculatedValue, entries[0].Timestamp), nil
+	}
+	return nil, errors.New("no entries found")
+}
+
 func (s *SqliteDataStore) RegisterMessaging(device *models.NotificationsDevice) error {
 	var notificationsDevices []*models.NotificationsDevice
 	s.database.Where("messaging_token = ?", device.MessagingToken).Find(&notificationsDevices)

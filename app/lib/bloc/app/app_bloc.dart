@@ -47,6 +47,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
         GetIt.I.registerSingleton<ApiWrapper>(
             RestApiWrapper(config.connectionUrl!));
+
+        _notificationBloc.add(LoadNotificationEvent(config.firebaseConfig));
       }
       return AppState(false, config);
     }
@@ -54,7 +56,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   Future<AppState> _mapSetConfigEvent(SetConfigEvent event) async {
     final storageRepo = GetIt.I.get<StorageRepository>();
-    await storageRepo.store(PREFS_APP_CONFIG_KEY, event.config.toJson());
     AppConfig newConfig = event.config;
     if (event.config != AppConfig.empty() &&
         event.config.connectionUrl != null) {
@@ -82,11 +83,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         _notificationBloc.add(LoadNotificationEvent(fbConfig));
       }
     }
+
+    await storageRepo.store(PREFS_APP_CONFIG_KEY, newConfig.toJson());
     return AppState(false, newConfig);
   }
 
   Future<AppState> _mapLogoutEvent(LogoutEvent event) async {
-    final firebaseRepo = GetIt.I.get<AbstractFirebaseRepository>();
+    final firebaseRepo = GetIt.I.get<AbstractNotificationRepository>();
     final storageRepo = GetIt.I.get<StorageRepository>();
 
     storageRepo.remove(PREFS_APP_CONFIG_KEY);

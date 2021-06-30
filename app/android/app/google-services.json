@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "592855333182",
+    "project_id": "co2-sensor-df995",
+    "storage_bucket": "co2-sensor-df995.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592855333182:android:41d220b10070b00fa9946f",
+        "android_client_info": {
+          "package_name": "dev.niggelgame.co2sensor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "592855333182-u4hgs6h0jmrl3ja1ivdn0mu5pi2c1rql.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUUJwmb2VhClD06pRWvyCghLIcnUEBoeA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "592855333182-u4hgs6h0jmrl3ja1ivdn0mu5pi2c1rql.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

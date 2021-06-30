@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:co2sensor/bloc/app/app_bloc.dart';
 import 'package:co2sensor/bloc/notification/notification_bloc.dart';
 import 'package:co2sensor/models/app_config.dart';
@@ -9,24 +11,37 @@ import 'package:co2sensor/screens/start_screen.dart';
 import 'package:co2sensor/theming/theme.dart';
 import 'package:co2sensor/utils/logger.dart';
 import 'package:co2sensor/utils/simple_bloc_observer.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  const options = FirebaseOptions(
+    apiKey: 'AIzaSyDUUJwmb2VhClD06pRWvyCghLIcnUEBoeA',
+    appId: '1:592855333182:android:41d220b10070b00fa9946f',
+    messagingSenderId: '592855333182',
+    projectId: 'co2-sensor-df995'
+  );
+  await Firebase.initializeApp(options: options, name: "test-special-name");
+
   setup();
 
-  runApp(MyApp());
+//  runApp(MyApp());
 }
 
 void setup() {
   GetIt.I.registerSingleton<StorageRepository>(
       SharedPreferencesStorageRepository());
   GetIt.I.get<StorageRepository>().initialize();
-
-  GetIt.I.registerSingleton<AbstractFirebaseRepository>(FirebaseRepository());
+  if(Platform.isIOS) {
+    GetIt.I.registerSingleton<AbstractNotificationRepository>(ApnsNotificationRepository());
+  } else {
+    GetIt.I.registerSingleton<AbstractNotificationRepository>(FirebaseRepository());
+  }
+  
 
   initLogger(prefix: 'CO2');
 
