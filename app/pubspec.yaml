@@ -59,30 +59,30 @@ dependencies:
 dependency_overrides:
   firebase_messaging:
     git:
-      url: git@github.com:Niggelgame/flutterfire.git
+      url: https://github.com/Niggelgame/flutterfire.git
       path: packages/firebase_messaging/firebase_messaging
 
   firebase_messaging_platform_interface:
     git:
-      url: git@github.com:Niggelgame/flutterfire.git
+      url: https://github.com/Niggelgame/flutterfire.git
       path: packages/firebase_messaging/firebase_messaging_platform_interface
   firebase_messaging_web:
     git:
-      url: git@github.com:Niggelgame/flutterfire.git
+      url: https://github.com/Niggelgame/flutterfire.git
       path: packages/firebase_messaging/firebase_messaging_web
 
   firebase_core:
     git:
-      url: git@github.com:Niggelgame/flutterfire.git
+      url: https://github.com/Niggelgame/flutterfire.git
       path: packages/firebase_core/firebase_core
 
   firebase_core_platform_interface:
     git:
-      url: git@github.com:Niggelgame/flutterfire.git
+      url: https://github.com/Niggelgame/flutterfire.git
       path: packages/firebase_core/firebase_core_platform_interface
   firebase_core_web:
     git:
-      url: git@github.com:Niggelgame/flutterfire.git
+      url: https://github.com/Niggelgame/flutterfire.git
       path: packages/firebase_core/firebase_core_web
 
 dev_dependencies:
