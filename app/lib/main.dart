@@ -29,7 +29,7 @@ void main() async {
 
   setup();
 
-//  runApp(MyApp());
+  runApp(MyApp());
 }
 
 void setup() {

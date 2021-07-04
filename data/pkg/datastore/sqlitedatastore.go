@@ -2,10 +2,11 @@ package datastore
 
 import (
 	"errors"
+	"log"
+
 	"github.com/niggelgame/co2-sensor/data/pkg/models"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"log"
 )
 
 type SqliteDataStore struct {
@@ -22,7 +23,7 @@ func (s *SqliteDataStore) GetCumulatedEntry() (*models.Entry, error) {
 			cumulatedValue = cumulatedValue + entries[i].Value
 		}
 
-		calculatedValue := int(cumulatedValue / len(entries))
+		calculatedValue := cumulatedValue / len(entries)
 
 		return models.NewEntry(calculatedValue, entries[0].Timestamp), nil
 	}
