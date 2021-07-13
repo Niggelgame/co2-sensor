@@ -15,7 +15,7 @@ type SqliteDataStore struct {
 
 func (s *SqliteDataStore) GetCumulatedEntry() (*models.Entry, error) {
 	var entries []*models.Entry
-	s.database.Order("timestamp DESC").Limit(5).Find(&entries)
+	s.database.Order("timestamp DESC").Limit(10).Find(&entries)
 
 	if len(entries) > 0 {
 		cumulatedValue := 0
