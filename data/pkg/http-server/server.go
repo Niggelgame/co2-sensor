@@ -78,6 +78,29 @@ func (s *Server) GetCumulatedEntry(c *fiber.Ctx) (err error) {
 	return err
 }
 
+func (s *Server) GetLastSince(c *fiber.Ctx) (err error) {
+	cnt := c.Params("count")
+	count, err := strconv.ParseInt(cnt, 10, 64)
+	if err != nil {
+		c.Status(400)
+		return err
+	}
+	entries, err := (*s.store).GetLastEntries(count)
+	if err != nil {
+		c.Status(500)
+		return err
+	}
+
+	ent, err := json.Marshal(entries)
+	if err != nil {
+		c.Status(500)
+		return err
+	}
+	err = c.Send(ent)
+
+	return err
+}
+
 func (s *Server) GetEntriesSince(c *fiber.Ctx) (err error) {
 	ts := c.Params("timestamp")
 	timestamp, err := strconv.ParseInt(ts, 10, 64)
@@ -120,6 +143,7 @@ func (s *Server) GetAll(c *fiber.Ctx) (err error) {
 
 func (s *Server) GetAndroidClientConfig(c *fiber.Ctx) (err error) {
 	if s.fbCfg == nil {
+		c.Status(404)
 		return err
 	}
 	if s.fbCfg.AppIdAndroid != "" {
@@ -129,6 +153,8 @@ func (s *Server) GetAndroidClientConfig(c *fiber.Ctx) (err error) {
 			MessagingSenderId: s.fbCfg.MessagingSenderId,
 			ProjectId:         s.fbCfg.ProjectId,
 		})
+	} else {
+		c.Status(404)
 	}
 
 	return err
@@ -136,6 +162,7 @@ func (s *Server) GetAndroidClientConfig(c *fiber.Ctx) (err error) {
 
 func (s *Server) GetIosClientConfig(c *fiber.Ctx) (err error) {
 	if s.fbCfg == nil {
+		c.Status(404)
 		return err
 	}
 
@@ -146,6 +173,8 @@ func (s *Server) GetIosClientConfig(c *fiber.Ctx) (err error) {
 			MessagingSenderId: s.fbCfg.MessagingSenderId,
 			ProjectId:         s.fbCfg.ProjectId,
 		})
+	} else {
+		c.Status(404)
 	}
 
 	return err
@@ -153,6 +182,7 @@ func (s *Server) GetIosClientConfig(c *fiber.Ctx) (err error) {
 
 func (s *Server) GetWebClientConfig(c *fiber.Ctx) (err error) {
 	if s.fbCfg == nil {
+		c.Status(404)
 		return err
 	}
 
@@ -163,6 +193,8 @@ func (s *Server) GetWebClientConfig(c *fiber.Ctx) (err error) {
 			MessagingSenderId: s.fbCfg.MessagingSenderId,
 			ProjectId:         s.fbCfg.ProjectId,
 		})
+	} else {
+		c.Status(404)
 	}
 
 	return err
@@ -209,6 +241,7 @@ func (s *Server) Start(address string) {
 
 	app.Post("/add", s.AddEntry)
 	app.Get("/last", s.GetLastEntry)
+	app.Get("/last/:count", s.GetLastSince)
 	app.Get("/cumulated", s.GetCumulatedEntry)
 	app.Get("/since/:timestamp", s.GetEntriesSince)
 	app.Get("all", s.GetAll)

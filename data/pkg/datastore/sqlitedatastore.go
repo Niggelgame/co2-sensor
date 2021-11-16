@@ -13,6 +13,12 @@ type SqliteDataStore struct {
 	database *gorm.DB
 }
 
+func (s *SqliteDataStore) GetNotificationDevices() ([]*models.NotificationsDevice, error) {
+	var devices []*models.NotificationsDevice
+	s.database.Find(&devices)
+	return devices, nil
+}
+
 func (s *SqliteDataStore) GetCumulatedEntry() (*models.Entry, error) {
 	var entries []*models.Entry
 	s.database.Order("timestamp DESC").Limit(10).Find(&entries)
@@ -75,6 +81,16 @@ func (s *SqliteDataStore) GetLastEntry() (*models.Entry, error) {
 func (s *SqliteDataStore) GetEntriesSince(unixTimestamp int64) ([]*models.Entry, error) {
 	var entries []*models.Entry
 	s.database.Where("timestamp >= ?", unixTimestamp).Find(&entries)
+
+	return entries, nil
+}
+
+func (s *SqliteDataStore) GetLastEntries(count int64) ([]*models.Entry, error) {
+	if count < 1 {
+		return nil, errors.New("negative count")
+	}
+	var entries []*models.Entry
+	s.database.Order("timestamp DESC").Limit(int(count)).Find(&entries)
 
 	return entries, nil
 }

@@ -15,8 +15,10 @@ func main() {
 	fbCfg := config.LoadFirebaseConfig()
 
 	var store datastore.DataStore = datastore.CreateSqliteDataStore(cfg.SqlitePath)
+	defer store.Close()
 
 	err := store.CreateNonExistingTables()
+
 
 	if err != nil {
 		log.Fatal("cannot create new tables: ", err)
@@ -26,12 +28,14 @@ func main() {
 
 	// Create Goroutine deleting values older than cfg.MaxEntryAgeDays days
 	go cleanup.Cleanup()
-
 	defer cleanup.StopCleanup()
 
-	defer store.Close()
-
 	notificationHandler := notifications.CreateNotificationHandler(cfg.FirebaseCredentialsPath)
+
+	notificationService := notifications.CreateDeviceNotificationService(notificationHandler, store)
+
+	go notificationService.Start()
+	defer notificationService.Stop()
 
 	server := http_server.CreateServer(&store, notificationHandler, fbCfg)
 

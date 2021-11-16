@@ -10,6 +10,8 @@ type DataStore interface {
 
 	GetLastEntry() (*models.Entry, error)
 
+	GetLastEntries(count int64) ([]*models.Entry, error)
+
 	GetEntriesSince(unixTimestamp int64) ([]*models.Entry, error)
 
 	GetAllEntries() ([]*models.Entry, error)
@@ -19,6 +21,8 @@ type DataStore interface {
 	RegisterMessaging(device *models.NotificationsDevice) error
 
 	UnregisterMessaging(device *models.NotificationsDevice) error
+
+	GetNotificationDevices() ([]*models.NotificationsDevice, error)
 
 	CreateNonExistingTables() error
 

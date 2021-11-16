@@ -9,11 +9,20 @@ import (
 )
 
 type NotificationHandler struct {
-	Client *messaging.Client
+	client *messaging.Client
 }
 
-func (n *NotificationHandler) SendNotification() {
-
+func (n *NotificationHandler) SendNotification(fcmToken string, title string, message string) error {
+	send, err := n.client.Send(context.Background(), &messaging.Message{
+		Notification: &messaging.Notification{
+			Title: title,
+			Body:  message,
+		},
+		Android: &messaging.AndroidConfig{Priority: "high"},
+		Token:   fcmToken,
+	})
+	log.Println("Sent message ", send)
+	return err
 }
 
 func CreateNotificationHandler(firebaseCredentialsPath string) *NotificationHandler {
@@ -29,6 +38,6 @@ func CreateNotificationHandler(firebaseCredentialsPath string) *NotificationHand
 	}
 
 	return &NotificationHandler{
-		Client: msgClient,
+		client: msgClient,
 	}
 }
