@@ -32,7 +32,7 @@ func main() {
 
 	notificationHandler := notifications.CreateNotificationHandler(cfg.FirebaseCredentialsPath)
 
-	notificationService := notifications.CreateDeviceNotificationService(notificationHandler, store)
+	notificationService := notifications.CreateDeviceNotificationService(notificationHandler, store, cfg.FatalTriggerLevel)
 
 	go notificationService.Start()
 	defer notificationService.Stop()

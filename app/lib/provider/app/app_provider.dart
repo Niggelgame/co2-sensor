@@ -62,6 +62,21 @@ class AppProvider extends StateNotifier<AppState> {
     state = AppState(false, config);
   }
 
+
+  Future<void> logout() async {
+    state = AppState(false, AppConfig.empty());
+  }
+}
+
+final logoutProvider = Provider((ref) => LogoutProvider(ref.read));
+
+class LogoutProvider {
+  final Reader _read;
+
+  final logoutProviderLogger = Logger('LogoutProvider');
+
+  LogoutProvider(this._read);
+
   Future<void> logout() async {
     final storageRepo = _read(storageRepositoryProvider);
     final notificationsRepo = _read(notificationRepositoryProvider);
@@ -76,10 +91,9 @@ class AppProvider extends StateNotifier<AppState> {
       try {
         api.unregisterToken(oldToken);
       } catch (e) {
-        appStateLogger.info("Failed to deregister token");
+        logoutProviderLogger.info("Failed to deregister token");
       }
     }
-
-    state = AppState(false, AppConfig.empty());
+    _read(appProvider.notifier).logout();
   }
 }

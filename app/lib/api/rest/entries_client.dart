@@ -13,6 +13,9 @@ abstract class EntriesClient {
   @GET("/last")
   Future<Entry> getLastEntry();
 
+  @GET("/last/{count}")
+  Future<List<Entry>> getLastEntries(@Path("count") int count);
+
   @GET("/since/{timestamp}")
   Future<List<Entry>> getEntriesSince(@Path() int timestamp);
 
