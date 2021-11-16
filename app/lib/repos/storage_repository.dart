@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:logging/logging.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+final storageRepositoryProvider = Provider<StorageRepository>((_) => SharedPreferencesStorageRepository()..initialize());
 
 abstract class StorageRepository {
   Future initialize();
@@ -53,12 +56,15 @@ class SharedPreferencesStorageRepository implements StorageRepository {
       return null;
     }
     try {
-      return _prefs!.getString(key)!;
+      final val = _prefs!.getString(key);
+      if(val == null) {
+        sharedPreferencesStorageRepositoryLogger.finest('Failed to read String for Key $key');
+      }
+      return val;
     } catch (e) {
       sharedPreferencesStorageRepositoryLogger.info("Failed to read String for Key $key", e);
       return null;
     }
-    
   }
 
   @override

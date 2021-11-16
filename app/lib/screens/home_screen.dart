@@ -1,19 +1,21 @@
-import 'package:co2sensor/bloc/app/app_bloc.dart';
+import 'package:co2sensor/provider/app/app_provider.dart';
+import 'package:co2sensor/provider/notification/notification_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(notificationStateProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text('CO2'),
         actions: [
           IconButton(
             onPressed: () {
-              context.read<AppBloc>().add(LogoutEvent());
+              ref.read(appProvider.notifier).logout();
             },
             icon: Icon(Icons.logout),
           )

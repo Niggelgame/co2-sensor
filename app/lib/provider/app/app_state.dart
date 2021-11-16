@@ -1,10 +1,10 @@
-part of 'app_bloc.dart';
+part of 'app_provider.dart';
 
 class AppState extends Equatable {
   final bool loading;
   final AppConfig config;
 
-  AppState(this.loading, this.config);
+  const AppState(this.loading, this.config);
 
   @override
   List<Object?> get props => [loading, config];

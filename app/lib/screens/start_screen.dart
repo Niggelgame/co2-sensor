@@ -1,20 +1,14 @@
-import 'package:co2sensor/bloc/app/app_bloc.dart';
 import 'package:co2sensor/models/app_config.dart';
+import 'package:co2sensor/provider/app/app_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class StartScreen extends StatefulWidget {
-  StartScreen({Key? key}) : super(key: key);
+final startScreenTextEditingControllerProvider = Provider((_) => TextEditingController());
 
-  @override
-  _StartScreenState createState() => _StartScreenState();
-}
-
-class _StartScreenState extends State<StartScreen> {
-  final TextEditingController controller = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
+class StartScreen extends ConsumerWidget {
+@override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = ref.watch(startScreenTextEditingControllerProvider);
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -34,9 +28,7 @@ class _StartScreenState extends State<StartScreen> {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  var bloc = context.read<AppBloc>();
-
-                  bloc.add(SetConfigEvent(AppConfig(controller.text, null)));
+                  ref.read(appProvider.notifier).setConfig(AppConfig(controller.text));
                 },
                 child: Text("Save and connect"),
               ),

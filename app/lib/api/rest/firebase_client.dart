@@ -1,6 +1,7 @@
 
 
 import 'package:co2sensor/models/firebase_config.dart';
+import 'package:co2sensor/models/notification_device.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 
@@ -20,8 +21,8 @@ abstract class FirebaseClient {
   Future<FirebaseConfig?> getWebFirebaseConfig();
 
   @POST("/messaging/register")
-  Future registerMessaging(@Body() String key);
+  Future registerMessaging(@Body() NotificationDevice device);
 
   @POST("/messaging/unregister")
-  Future unregisterToken(@Body() String key);
+  Future unregisterToken(@Body() NotificationDevice device);
 }

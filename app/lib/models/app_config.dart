@@ -10,12 +10,11 @@ const PREFS_APP_CONFIG_KEY = "APP_CONFIG_KEY";
 @JsonSerializable()
 class AppConfig extends Equatable {
   final String? connectionUrl;
-  final FirebaseConfig? firebaseConfig;
 
-  const AppConfig(this.connectionUrl, this.firebaseConfig);
+  const AppConfig(this.connectionUrl);
 
   @override
-  List<Object?> get props => [connectionUrl, firebaseConfig];
+  List<Object?> get props => [connectionUrl];
 
   @override
   bool? get stringify => true;
@@ -26,17 +25,14 @@ class AppConfig extends Equatable {
   Map<String, dynamic> toJson() => _$AppConfigToJson(this);
 
   factory AppConfig.empty() {
-    return AppConfig(null, null);
+    return AppConfig(null);
   }
 
-  AppConfig copyWith(
-      {String? connectionUrl,
-      FirebaseConfig? firebaseConfig,
-      bool allowOverwriteFirebaseConfigNull = false}) {
+  AppConfig copyWith({
+    String? connectionUrl,
+  }) {
     return AppConfig(
-        connectionUrl ?? this.connectionUrl,
-        allowOverwriteFirebaseConfigNull
-            ? firebaseConfig
-            : firebaseConfig ?? this.firebaseConfig);
+      connectionUrl ?? this.connectionUrl,
+    );
   }
 }
