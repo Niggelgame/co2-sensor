@@ -1,8 +1,11 @@
 [Unit]
 Description=Start CO2 Sensor
+After=docker.service
+Requires=docker.service
 
 [Service]
-ExecStart=sudo /home/pi/co2-sensor/start.sh
+ExecStart=/home/pi/co2-sensor/start.sh
+User=root
 
 [Install]
 WantedBy=multi-user.target
