@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'CO2 Sensor',
       theme: Co2Theme.lightTheme,
+      darkTheme: Co2Theme.darkTheme,
       home: HomeWrapper(),
     );
   }

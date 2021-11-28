@@ -25,7 +25,6 @@ func (d *DeviceNotificationService) Start() {
 
 	ticker := time.NewTicker(15 * time.Second)
 	for {
-
 		select {
 		case <-ticker.C:
 			{

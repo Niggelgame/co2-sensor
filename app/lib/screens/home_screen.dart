@@ -1,3 +1,5 @@
+
+import 'package:co2sensor/widgets/graph.dart';
 import 'package:co2sensor/provider/app/app_provider.dart';
 import 'package:co2sensor/provider/notification/notification_bloc.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(notificationStateProvider);
+  
     return Scaffold(
       appBar: AppBar(
         title: Text('CO2'),
@@ -22,9 +25,15 @@ class HomeScreen extends ConsumerWidget {
         ],
       ),
       body: Center(
-        child: Container(
-          color: Colors.red,
-          height: 500,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                height: 500,
+                child: Graph(),
+              )
+            ],
+          ),
         ),
       ),
     );

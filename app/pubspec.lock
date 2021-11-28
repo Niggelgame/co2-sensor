@@ -63,7 +63,7 @@ packages:
       name: build_resolvers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.4"
+    version: "2.0.5"
   build_runner:
     dependency: "direct dev"
     description:
@@ -189,7 +189,7 @@ packages:
       name: dio
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.3"
+    version: "4.0.4"
   equatable:
     dependency: "direct main"
     description:
@@ -267,6 +267,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  fl_chart:
+    dependency: "direct main"
+    description:
+      name: fl_chart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.40.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -484,7 +491,7 @@ packages:
       name: retrofit_generator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0+1"
+    version: "3.0.0+2"
   riverpod:
     dependency: transitive
     description:
@@ -496,6 +503,20 @@ packages:
     dependency: "direct main"
     description:
       name: shared_preferences
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.9"
+  shared_preferences_android:
+    dependency: transitive
+    description:
+      name: shared_preferences_android
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.9"
+  shared_preferences_ios:
+    dependency: transitive
+    description:
+      name: shared_preferences_ios
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.8"
@@ -671,7 +692,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.0"
+    version: "2.3.1"
   xdg_directories:
     dependency: transitive
     description:

@@ -27,6 +27,8 @@ final apiProvider = Provider<ApiWrapper?>((ref) {
 abstract class ApiWrapper {
   Future<Entry> getLastEntry();
 
+  Future<List<Entry>> getLastEntries(int count);
+
   Future<List<Entry>> getEntriesSince(int timestamp);
 
   Future<List<Entry>> getAllEntries();
@@ -100,4 +102,9 @@ class RestApiWrapper with EquatableMixin implements ApiWrapper {
 
   @override
   List<Object?> get props => [baseUrl];
+
+  @override
+  Future<List<Entry>> getLastEntries(int count) {
+    return _entriesClient.getLastEntries(count);
+  }
 }

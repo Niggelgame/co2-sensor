@@ -18,8 +18,10 @@ func (s *SqliteDbCleanup) Cleanup() {
 		select {
 		case <-ticker.C:
 			{
+				println("Cleaning up...")
 				now := time.Now().UnixNano()
-				oldestTs := now - (time.Hour * 24).Nanoseconds()
+
+				oldestTs := now - ((time.Hour * 24 ).Nanoseconds() * int64(s.maxAgeInDays))
 				s.database.Where("timestamp < ?", oldestTs).Delete(&models.Entry{})
 			}
 		case <-s.stopChan:

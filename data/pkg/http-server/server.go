@@ -33,13 +33,8 @@ func (s *Server) AddEntry(c *fiber.Ctx) (err error) {
 		c.Status(500)
 		return err
 	}
-	ent, err := json.Marshal(entry)
 
-	if err != nil {
-		c.Status(500)
-		return err
-	}
-	err = c.Send(ent)
+	err = c.JSON(entry)
 
 	return err
 }
@@ -51,12 +46,7 @@ func (s *Server) GetLastEntry(c *fiber.Ctx) (err error) {
 		return err
 	}
 
-	ent, err := json.Marshal(entry)
-	if err != nil {
-		c.Status(500)
-		return err
-	}
-	err = c.Send(ent)
+	err = c.JSON(entry)
 
 	return err
 }
@@ -68,12 +58,7 @@ func (s *Server) GetCumulatedEntry(c *fiber.Ctx) (err error) {
 		return err
 	}
 
-	ent, err := json.Marshal(entry)
-	if err != nil {
-		c.Status(500)
-		return err
-	}
-	err = c.Send(ent)
+	err = c.JSON(entry)
 
 	return err
 }
@@ -91,12 +76,7 @@ func (s *Server) GetLastSince(c *fiber.Ctx) (err error) {
 		return err
 	}
 
-	ent, err := json.Marshal(entries)
-	if err != nil {
-		c.Status(500)
-		return err
-	}
-	err = c.Send(ent)
+	err = c.JSON(entries)
 
 	return err
 }
@@ -114,12 +94,7 @@ func (s *Server) GetEntriesSince(c *fiber.Ctx) (err error) {
 		return err
 	}
 
-	ent, err := json.Marshal(entries)
-	if err != nil {
-		c.Status(500)
-		return err
-	}
-	err = c.Send(ent)
+	err = c.JSON(entries)
 
 	return err
 }
@@ -131,12 +106,7 @@ func (s *Server) GetAll(c *fiber.Ctx) (err error) {
 		return err
 	}
 
-	ent, err := json.Marshal(entries)
-	if err != nil {
-		c.Status(500)
-		return err
-	}
-	err = c.Send(ent)
+	err = c.JSON(entries)
 
 	return err
 }
