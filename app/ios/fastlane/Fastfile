@@ -95,6 +95,7 @@ platform :ios do
       #skip_waiting_for_build_processing: true,
       #skip_submission: true,
       #distribute_external: false,
+      api_key_path: "fastlane/fastlane_key.json"
       notify_external_testers: false,
       ipa: "./Runner.ipa"
     )

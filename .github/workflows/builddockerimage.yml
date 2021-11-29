@@ -240,7 +240,12 @@ jobs:
           ssh-add "$SSH_PATH/id_rsa"
         env:
           PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-
+      - name: Setup Fastlane API Key
+        run: |
+          echo "$FASTLANE_API_KEY" > app/ios/fastlane/fastlane_key.json
+        env:
+          FASTLANE_API_KEY: ${{ secrets.FASTLANE_API_KEY }}
+        
       - name: Deploy iOS Beta to TestFlight via Fastlane
         uses: maierj/fastlane-action@v1.4.0
         with:
