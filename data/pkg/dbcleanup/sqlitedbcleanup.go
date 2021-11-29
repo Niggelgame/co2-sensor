@@ -22,7 +22,7 @@ func (s *SqliteDbCleanup) Cleanup() {
 				now := time.Now().UnixNano()
 
 				oldestTs := now - ((time.Hour * 24 ).Nanoseconds() * int64(s.maxAgeInDays))
-				s.database.Where("timestamp < ?", oldestTs).Delete(&models.Entry{})
+				s.database.Where("timestamp < ?", oldestTs).Unscoped().Delete(&models.Entry{})
 			}
 		case <-s.stopChan:
 			{
