@@ -3,6 +3,7 @@ package http_server
 import (
 	"encoding/json"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/niggelgame/co2-sensor/data/pkg/config"
 	"github.com/niggelgame/co2-sensor/data/pkg/datastore"
 	"github.com/niggelgame/co2-sensor/data/pkg/models"
@@ -208,6 +209,8 @@ func (s *Server) UnregisterMessagingClient(c *fiber.Ctx) (err error) {
 
 func (s *Server) Start(address string) {
 	app := fiber.New()
+
+	app.Use(logger.New(logger.Config{Format: "[${ip}]:${port} ${status} - ${method} ${path} - ${reqHeader} -> ${resBody}\n"}))
 
 	app.Post("/add", s.AddEntry)
 	app.Get("/last", s.GetLastEntry)

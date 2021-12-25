@@ -11,6 +11,7 @@ import (
 
 type SqliteDataStore struct {
 	database *gorm.DB
+	cache []*models.Entry
 }
 
 func (s *SqliteDataStore) GetNotificationDevices() ([]*models.NotificationsDevice, error) {
@@ -21,7 +22,13 @@ func (s *SqliteDataStore) GetNotificationDevices() ([]*models.NotificationsDevic
 
 func (s *SqliteDataStore) GetCumulatedEntry() (*models.Entry, error) {
 	var entries []*models.Entry
-	s.database.Order("timestamp DESC").Limit(10).Find(&entries)
+
+	// Use cache if available
+	if len(s.cache) < 10 {
+		s.database.Order("timestamp DESC").Limit(10).Find(&entries)
+	} else {
+		entries = s.cache
+	}
 
 	if len(entries) > 0 {
 		cumulatedValue := 0
@@ -65,6 +72,14 @@ func (s *SqliteDataStore) CreateNonExistingTables() error {
 
 func (s *SqliteDataStore) InsertNewEntry(entry *models.Entry) error {
 	s.database.Create(entry)
+
+	// Update cache
+	if len(s.cache) > 10 {
+		s.cache = append(s.cache[1:], entry)
+	} else {
+		s.cache = append(s.cache, entry)
+	}
+
 	return nil
 }
 
@@ -117,7 +132,7 @@ func CreateSqliteDataStore(filepath string) *SqliteDataStore {
 		log.Fatal("could not open database file: ", err)
 	}
 
-	store := &SqliteDataStore{database: db}
+	store := &SqliteDataStore{database: db, cache: make([]*models.Entry, 0)}
 
 	return store
 }

@@ -14,6 +14,17 @@ final graphDataProvider = FutureProvider((ref) async {
   return data;
 });
 
+final refreshingGraphDataProvider = Provider((ref) {
+  ref.listen(graphDataProvider, (AsyncValue<List<Entry>>? previous, AsyncValue<List<Entry>> next) async { 
+    if(next.asData != null) {
+      await Future.delayed(Duration(seconds: 10));
+      // ref.refresh(graphDataProvider);
+    }
+  });
+
+  return ref.watch(graphDataProvider);
+});
+
 const errorSpots = [
   FlSpot(2, 3),
   FlSpot(0, 3),

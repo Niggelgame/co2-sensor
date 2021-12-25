@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:co2sensor/models/entry.dart';
 import 'package:co2sensor/provider/data/graph_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -47,11 +48,12 @@ class GraphDataConfiguration {
   static final swapAnimationCurve = Curves.linear;
 
   static String getTitle(double value, int currentMin, int currentMax) {
+    final deltaTime = DateTime.fromMicrosecondsSinceEpoch(value ~/ 1000);
     switch (timeScaleForRange(currentMin, currentMax)) {
       case TimeScale.second:
-        return '${value.toInt().inSeconds}s';
+        return '${deltaTime.hour}:${deltaTime.minute}';
       case TimeScale.minute:
-        return '${value.toInt().inMinutes}m';
+        return '${deltaTime.hour}:${deltaTime.minute.roundedLastDigit}';
       case TimeScale.hour:
         return '${value.toInt().inHours}h';
       case TimeScale.day:
@@ -86,6 +88,7 @@ class GraphDataConfiguration {
 }
 
 extension InScale on int {
+  int get roundedLastDigit => 10 * (this ~/ 10);
   int get inSeconds => (this / 1000000000).round();
   int get inMinutes => (this / 60000000000).round();
   int get inHours => (this / 3600000000000).round();
@@ -100,55 +103,69 @@ class Graph extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(graphDataProvider);
-    return data.when(
-      data: (values) => LineChart(
-        LineChartData(
-          gridData: GraphDataConfiguration.gridData(context),
-          borderData: GraphDataConfiguration.borderData(context),
-          titlesData: FlTitlesData(
-            topTitles: SideTitles(
-              showTitles: false,
-            ),
-            rightTitles: SideTitles(
-              showTitles: false,
-            ),
-            bottomTitles: SideTitles(
-              showTitles: true,
-              getTitles: (value) => GraphDataConfiguration.getTitle(
-                value,
-                values.length > 0 ? values.first.timestamp : 0,
-                values.length > 0 ? values.last.timestamp : 1,
-              ),
-            ),
-          ),
-          clipData: GraphDataConfiguration.clipData,
-          lineTouchData: LineTouchData(
-            handleBuiltInTouches: true,
-            touchTooltipData: LineTouchTooltipData(
-              tooltipBgColor: Colors.blueGrey.withOpacity(0.8),
-            ),
-          ),
-          lineBarsData: [
-            LineChartBarData(
-              isCurved: true,
-              curveSmoothness: 0.2,
-              dotData: FlDotData(show: false),
-              barWidth: 5,
-              spots: values
-                  .map(
-                      (e) => FlSpot(e.timestamp.toDouble(), e.value.toDouble()))
-                  .toList(),
-              colors: GraphDataConfiguration.lineColors,
-              gradientFrom: GraphDataConfiguration.lineGradientFrom,
-            ),
-          ],
-        ),
-        swapAnimationDuration: GraphDataConfiguration.swapAnimationDuration,
-        swapAnimationCurve: GraphDataConfiguration.swapAnimationCurve,
+    final data = ref.watch(refreshingGraphDataProvider);
+    print(data);
+    return data.map(
+      data: (values) => _DataGraph(values: values.value),
+      error: (e) => Text(e.error.toString()),
+      loading: (v) => v.maybeWhen(
+        orElse: () => _LoadingGraph(),
+        data: (values) => _DataGraph(values: values),
       ),
-      error: (e, s) => Text(e.toString()),
-      loading: () => _LoadingGraph(),
+    );
+  }
+}
+
+class _DataGraph extends StatelessWidget {
+  final List<Entry> values;
+  const _DataGraph({Key? key, required this.values}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return LineChart(
+      LineChartData(
+        gridData: GraphDataConfiguration.gridData(context),
+        borderData: GraphDataConfiguration.borderData(context),
+        titlesData: FlTitlesData(
+          topTitles: SideTitles(
+            showTitles: false,
+          ),
+          rightTitles: SideTitles(
+            showTitles: false,
+          ),
+          bottomTitles: SideTitles(
+            showTitles: true,
+            getTitles: (value) => GraphDataConfiguration.getTitle(
+              value,
+              values.length > 0 ? values.first.timestamp : 0,
+              values.length > 0 ? values.last.timestamp : 1,
+            ),
+            interval: 2,
+          ),
+        ),
+        clipData: GraphDataConfiguration.clipData,
+        lineTouchData: LineTouchData(
+          handleBuiltInTouches: true,
+          touchTooltipData: LineTouchTooltipData(
+            tooltipBgColor: Colors.blueGrey.withOpacity(0.8),
+          ),
+        ),
+        lineBarsData: [
+          LineChartBarData(
+            isCurved: true,
+            curveSmoothness: 0.01,
+            dotData: FlDotData(show: false),
+            barWidth: 5,
+            spots: values
+                .map((e) => FlSpot(e.timestamp.toDouble(), e.value.toDouble()))
+                .toList(),
+            colors: GraphDataConfiguration.lineColors,
+            gradientFrom: GraphDataConfiguration.lineGradientFrom,
+          ),
+        ],
+      ),
+      swapAnimationDuration: GraphDataConfiguration.swapAnimationDuration,
+      swapAnimationCurve: GraphDataConfiguration.swapAnimationCurve,
     );
   }
 }
