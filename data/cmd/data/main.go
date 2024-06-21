@@ -5,7 +5,6 @@ import (
 	"github.com/niggelgame/co2-sensor/data/pkg/datastore"
 	"github.com/niggelgame/co2-sensor/data/pkg/dbcleanup"
 	http_server "github.com/niggelgame/co2-sensor/data/pkg/http-server"
-	"github.com/niggelgame/co2-sensor/data/pkg/notifications"
 	"log"
 )
 
