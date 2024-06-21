@@ -32,10 +32,11 @@ func main() {
 
 	notificationHandler := notifications.CreateNotificationHandler(cfg.FirebaseCredentialsPath)
 
-	notificationService := notifications.CreateDeviceNotificationService(notificationHandler, store, cfg.FatalTriggerLevel)
+	// Disable notifications for now
+	/*notificationService := notifications.CreateDeviceNotificationService(notificationHandler, store, cfg.FatalTriggerLevel)
 
 	go notificationService.Start()
-	defer notificationService.Stop()
+	defer notificationService.Stop()*/
 
 	server := http_server.CreateServer(&store, notificationHandler, fbCfg)
 
