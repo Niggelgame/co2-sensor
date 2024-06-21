@@ -166,7 +166,7 @@ jobs:
       - name: freeze pipfile
         run: |
           cd sensoring
-          pipenv lock -r > requirements.txt
+          pipenv requirements > requirements.txt
 
       # https://github.com/docker/setup-qemu-action
       - name: Set up QEMU

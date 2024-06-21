@@ -34,3 +34,7 @@ sudo systemctl start co2.service
 # Info
 sudo systemctl status co2.service 
 ```
+
+
+
+# Raspi OS 32 bit
