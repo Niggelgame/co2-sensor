@@ -103,8 +103,8 @@ jobs:
     env:
       DOCKER_REGISTRY: ghcr.io
       DOCKER_IMAGE: niggelgame/co2-data-image
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      DOCKER_USERNAME: ${{ github.actor }}
+      DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
       DOCKER_TARGET_PLATFORM: linux/arm/v7
     steps:
       - name: Checkout code
@@ -147,8 +147,8 @@ jobs:
     env:
       DOCKER_REGISTRY: ghcr.io
       DOCKER_IMAGE: niggelgame/co2-sensoring-image
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      DOCKER_USERNAME: ${{ github.actor }}
+      DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
       DOCKER_TARGET_PLATFORM: linux/arm/v7
     steps:
       - name: Checkout code
@@ -200,7 +200,7 @@ jobs:
 
   build-ios-app:
     needs: check-app
-    if: needs.check-app.outputs.run_job == 'true'
+    if: needs.check-app.outputs.run_job == 'true' && false
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
@@ -269,7 +269,7 @@ jobs:
 
   build-android-app:
     needs: check-app
-    if: needs.check-app.outputs.run_job == 'true'
+    if: needs.check-app.outputs.run_job == 'true' && false
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
