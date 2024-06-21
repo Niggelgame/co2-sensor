@@ -30,10 +30,11 @@ func main() {
 	go cleanup.Cleanup()
 	defer cleanup.StopCleanup()
 
-	notificationHandler := notifications.CreateNotificationHandler(cfg.FirebaseCredentialsPath)
-
 	// Disable notifications for now
-	/*notificationService := notifications.CreateDeviceNotificationService(notificationHandler, store, cfg.FatalTriggerLevel)
+	/*
+	notificationHandler := notifications.CreateNotificationHandler(cfg.FirebaseCredentialsPath)
+	
+	notificationService := notifications.CreateDeviceNotificationService(notificationHandler, store, cfg.FatalTriggerLevel)
 
 	go notificationService.Start()
 	defer notificationService.Stop()*/
