@@ -1,0 +1,1 @@
+Go Service providing data to Homebridge
