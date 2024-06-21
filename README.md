@@ -37,4 +37,7 @@ sudo systemctl status co2.service
 
 
 
-# Raspi OS 32 bit
+# Raspi OS lite 32 bit
+https://docs.docker.com/engine/install/raspberry-pi-os/
+
+--> ssh-copy-id -i <file> pi@<ip>
