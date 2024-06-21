@@ -4,8 +4,8 @@ services:
         ports:
             - "8000:8000"
         # disable due to storage issues
-        # volumes:
-        #    - .:/root/data
+        volumes:
+           - .:/root/data
         environment:
             - DATA_SQLITE_PATH=data/sqlite.db
             - DATA_MAX_ENTRY_AGE_DAYS=5

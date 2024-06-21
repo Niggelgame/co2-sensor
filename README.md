@@ -41,3 +41,7 @@ sudo systemctl status co2.service
 https://docs.docker.com/engine/install/raspberry-pi-os/
 
 --> ssh-copy-id -i <file> pi@<ip>
+
+
+-> create DB
+`sqlite3 co2sensor.db "VACUUM;"`
