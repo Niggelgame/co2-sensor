@@ -5,7 +5,7 @@ services:
             - "8000:8000"
         # disable due to storage issues
         volumes:
-           - volumes/data:/root/data
+           - ./volumes/data:/root/data
         environment:
             - DATA_SQLITE_PATH=data/sqlite.db
             - DATA_MAX_ENTRY_AGE_DAYS=5
