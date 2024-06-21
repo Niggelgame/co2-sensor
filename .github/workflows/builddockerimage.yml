@@ -99,7 +99,7 @@ jobs:
   build:
     needs: check-data
     if: needs.check-data.outputs.run_job == 'true'
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     env:
       DOCKER_REGISTRY: ghcr.io
       DOCKER_IMAGE: niggelgame/co2-data-image
@@ -143,7 +143,7 @@ jobs:
   build-sensor:
     needs: check-sensoring
     if: needs.check-sensoring.outputs.run_job == 'true'
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     env:
       DOCKER_REGISTRY: ghcr.io
       DOCKER_IMAGE: niggelgame/co2-sensoring-image
